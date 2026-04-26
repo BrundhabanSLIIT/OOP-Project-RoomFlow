@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -12,8 +11,8 @@ body {
 }
 
 .container {
-    width: 90%;
-    max-width: 1400px;
+    width: 95%;
+    max-width: 1500px;
     margin: 40px auto;
 }
 
@@ -70,6 +69,7 @@ body {
     color: #fff;
     transition: 0.2s ease;
     white-space: nowrap;
+    text-align: center;
 }
 
 .btn:hover {
@@ -129,11 +129,13 @@ body {
 }
 
 .table-wrapper {
+    width: 100%;
     overflow-x: auto;
 }
 
 table {
     width: 100%;
+    min-width: 1200px;
     border-collapse: collapse;
     background: white;
 }
@@ -152,17 +154,18 @@ th {
     color: #fff;
 }
 
-.actions {
+.action-buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    min-width: 160px;
 }
 
 table th:last-child,
 table td:last-child {
-    min-width: 170px;
+    min-width: 190px;
 }
 
 .empty-message {

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Edit Reservation</title>
 
-    <!-- Proper CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="<c:url value='/frontend/css/style.css?v=4' />">
 </head>
 <body>
@@ -14,7 +14,6 @@
     <div class="card">
         <h2>Edit Reservation</h2>
 
-        <!-- Error message -->
         <c:if test="${not empty error}">
             <div class="error-message">${error}</div>
         </c:if>
@@ -22,18 +21,14 @@
         <form action="/reservations/update" method="post" class="form-grid">
 
             <input type="text" name="reservationId" value="${reservation.reservationId}" readonly>
-
             <input type="text" name="customerId" value="${reservation.customerId}" required>
-
             <input type="text" name="customerName" value="${reservation.customerName}" required>
 
-            <!-- Phone validation -->
             <input type="text"
                    name="contactNumber"
                    value="${reservation.contactNumber}"
                    pattern="[0-9]{10}"
                    maxlength="10"
-                   title="Must be exactly 10 digits"
                    required>
 
             <input type="text" name="roomId" value="${reservation.roomId}" required>
@@ -46,7 +41,7 @@
 
             <input type="number" name="numberOfNights" value="${reservation.numberOfNights}" min="1" required>
 
-            <!-- Date validation -->
+            <!-- IMPORTANT IDs -->
             <input type="date" name="checkInDate" id="checkInDate" value="${reservation.checkInDate}" required>
             <input type="date" name="checkOutDate" id="checkOutDate" value="${reservation.checkOutDate}" required>
 
@@ -56,7 +51,7 @@
             </select>
 
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Update Reservation</button>
+                <button type="submit" class="btn btn-primary">Update</button>
                 <a href="/reservations" class="btn btn-secondary">Back</a>
             </div>
 
@@ -64,7 +59,8 @@
     </div>
 </div>
 
-<script src="<c:url value='/frontend/js/script.js' />"></script>
+<!-- JS MUST BE HERE -->
+<script src="<c:url value='/frontend/js/script.js?v=2' />"></script>
 
 </body>
 </html>

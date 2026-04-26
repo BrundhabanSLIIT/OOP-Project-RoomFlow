@@ -22,22 +22,37 @@ public class ReservationService {
     }
 
     public List<Reservation> searchReservations(String keyword) {
-        List<Reservation> reservations = fileHandler.readReservations();
+        List<Reservation> allReservations = fileHandler.readReservations();
 
         if (keyword == null || keyword.trim().isEmpty()) {
-            return reservations;
+            return allReservations;
         }
 
-        String searchText = keyword.toLowerCase();
+        String search = keyword.trim().toLowerCase().replace("-", "");
         List<Reservation> results = new ArrayList<>();
 
-        for (Reservation r : reservations) {
-            if (r.getReservationId().toLowerCase().contains(searchText)
-                    || r.getCustomerName().toLowerCase().contains(searchText)
-                    || r.getContactNumber().toLowerCase().contains(searchText)
-                    || r.getRoomId().toLowerCase().contains(searchText)
-                    || r.getRoomType().toLowerCase().contains(searchText)
-                    || r.getPaymentStatus().toLowerCase().contains(searchText)) {
+        for (Reservation r : allReservations) {
+            String reservationId = safe(r.getReservationId()).replace("-", "");
+            String customerName = safe(r.getCustomerName());
+            String contactNumber = safe(r.getContactNumber());
+            String roomId = safe(r.getRoomId());
+            String roomType = safe(r.getRoomType());
+            String paymentStatus = safe(r.getPaymentStatus());
+            String checkInDate = safe(r.getCheckInDate());
+            String checkOutDate = safe(r.getCheckOutDate());
+            String nights = String.valueOf(r.getNumberOfNights());
+            String totalCost = String.valueOf(r.getTotalCost());
+
+            if (reservationId.contains(search)
+                    || customerName.contains(search)
+                    || contactNumber.contains(search)
+                    || roomId.contains(search)
+                    || roomType.contains(search)
+                    || paymentStatus.contains(search)
+                    || checkInDate.contains(search)
+                    || checkOutDate.contains(search)
+                    || nights.contains(search)
+                    || totalCost.contains(search)) {
                 results.add(r);
             }
         }
@@ -45,15 +60,19 @@ public class ReservationService {
         return results;
     }
 
+    private String safe(String value) {
+        return value == null ? "" : value.toLowerCase();
+    }
+
     public String validateReservation(Reservation reservation) {
-        if (!reservation.getContactNumber().matches("\\d{10}")) {
-            return "Contact number must contain exactly 10 digits and no other characters.";
+        if (reservation.getContactNumber() == null || !reservation.getContactNumber().matches("\\d{10}")) {
+            return "Contact number must contain exactly 10 digits only.";
         }
 
-        LocalDate checkIn = LocalDate.parse(reservation.getCheckInDate());
-        LocalDate checkOut = LocalDate.parse(reservation.getCheckOutDate());
+        LocalDate checkInDate = LocalDate.parse(reservation.getCheckInDate());
+        LocalDate checkOutDate = LocalDate.parse(reservation.getCheckOutDate());
 
-        if (!checkOut.isAfter(checkIn)) {
+        if (!checkOutDate.isAfter(checkInDate)) {
             return "Check-out date must be after check-in date.";
         }
 
@@ -65,9 +84,9 @@ public class ReservationService {
     }
 
     public void addReservation(Reservation reservation) {
-        List<Reservation> list = fileHandler.readReservations();
-        list.add(reservation);
-        fileHandler.writeReservations(list);
+        List<Reservation> reservations = fileHandler.readReservations();
+        reservations.add(reservation);
+        fileHandler.writeReservations(reservations);
     }
 
     public Reservation getReservationById(String id) {
@@ -80,21 +99,21 @@ public class ReservationService {
     }
 
     public void updateReservation(Reservation updatedReservation) {
-        List<Reservation> list = fileHandler.readReservations();
+        List<Reservation> reservations = fileHandler.readReservations();
 
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getReservationId().equalsIgnoreCase(updatedReservation.getReservationId())) {
-                list.set(i, updatedReservation);
+        for (int i = 0; i < reservations.size(); i++) {
+            if (reservations.get(i).getReservationId().equalsIgnoreCase(updatedReservation.getReservationId())) {
+                reservations.set(i, updatedReservation);
                 break;
             }
         }
 
-        fileHandler.writeReservations(list);
+        fileHandler.writeReservations(reservations);
     }
 
     public void deleteReservation(String id) {
-        List<Reservation> list = fileHandler.readReservations();
-        list.removeIf(r -> r.getReservationId().equalsIgnoreCase(id));
-        fileHandler.writeReservations(list);
+        List<Reservation> reservations = fileHandler.readReservations();
+        reservations.removeIf(r -> r.getReservationId().equalsIgnoreCase(id));
+        fileHandler.writeReservations(reservations);
     }
 }

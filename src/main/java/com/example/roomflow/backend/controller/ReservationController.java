@@ -78,7 +78,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations/delete/{id}")
-    public String delete(@PathVariable String id) {
+    public String deleteReservation(@PathVariable String id) {
         reservationService.deleteReservation(id);
         return "redirect:/reservations";
     }
